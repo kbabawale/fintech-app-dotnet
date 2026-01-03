@@ -1,5 +1,7 @@
 using Fintech_App.Middlewares;
 using Fintech_App.Model.Db;
+using Fintech_App.Model.ServiceInterfaces;
+using Fintech_App.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +18,10 @@ builder.Services.AddControllers(options =>
     // Disable the default [ApiController] validation so our filter takes over
     options.SuppressModelStateInvalidFilter = true;
 });
-// builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddOpenApi();
+
+//Business Layer Services
+builder.Services.AddScoped<IAccount, AccountService>();
 
 //Input Validations
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();

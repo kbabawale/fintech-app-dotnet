@@ -30,6 +30,8 @@
     <Folder Include="Migrations/" />
     <Folder Include="Model/Domain/" />
     <Folder Include="Model/DTO/" />
+    <Folder Include="Model/ServiceInterfaces/" />
+    <Folder Include="Services/" />
     <Folder Include="Util/" />
     <Folder Include="Validations/" />
   </ItemGroup>
