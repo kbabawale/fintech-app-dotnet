@@ -7,15 +7,16 @@ namespace Fintech_App.Util
         public bool Success { get; set; }
         public string? Message { get; set; }
         public T? Data { get; set; }
-        public List<string>? Errors { get; set; }
+        // public List<string>? Errors { get; set; }
+        public string? Error { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         // Static helper methods for cleaner code
         public static ApiResponse<T> SuccessResponse(T data, string? message = null)
             => new() { Success = true, Data = data, Message = message };
 
-        public static ApiResponse<T> FailureResponse(List<string> errors, string? message = null)
-            => new() { Success = false, Errors = errors, Message = message };
+        public static ApiResponse<T> FailureResponse(string? error, string? message = null)
+            => new() { Success = false, Error = error, Message = message };
     }
 
     public class PagedResponse<T> : ApiResponse<T>

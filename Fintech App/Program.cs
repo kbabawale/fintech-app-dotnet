@@ -1,12 +1,27 @@
+using Fintech_App.Middlewares;
 using Fintech_App.Model.Db;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+}).ConfigureApiBehaviorOptions(options =>
+{
+    // Disable the default [ApiController] validation so our filter takes over
+    options.SuppressModelStateInvalidFilter = true;
+});
+// builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddOpenApi();
+
+//Input Validations
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddFluentValidationAutoValidation();
 
 //DB Context
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -20,7 +35,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//Error handler
+app.UseMiddleware<Errorhandler>();
+
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

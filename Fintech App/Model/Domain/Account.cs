@@ -9,7 +9,7 @@ namespace Fintech_App.Model.Domain
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public int AccountNumber { get; set; }
-        public decimal Balance { get; set; }
+        public decimal Balance { get; set; } = 0;
         public Currency Currency { get; set; } = Currency.NGN;
         public Guid UserId { get; set; }
         public User? User { get; set; }
