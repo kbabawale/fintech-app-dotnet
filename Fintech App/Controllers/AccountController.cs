@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fintech_App.Controllers
 {
-    [Route("[controller]")]
+    // [Route("[controller]")]
+    [Route("/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -15,8 +16,14 @@ namespace Fintech_App.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public ActionResult<List<Account>> Get()
+        // [HttpPost]
+        // public ActionResult<Account> CreateAccount()
+        // {
+
+        // }
+
+        [HttpGet("{id}")]
+        public ActionResult<List<Account>> GetAccounts()
         {
             _logger.LogInformation("Running /Account");
             return Ok();

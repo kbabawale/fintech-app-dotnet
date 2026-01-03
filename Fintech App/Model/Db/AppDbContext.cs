@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fintech_App.Model.Db
 {
-    public class AccountDbContext(DbContextOptions<AccountDbContext> options) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
         public DbSet<Account> Accounts => Set<Account>();
 
@@ -38,6 +38,30 @@ namespace Fintech_App.Model.Db
                 b.Property(x => x.CreatedAt)
                     .HasDefaultValueSql("SYSUTCDATETIME()");
             });
+
+
+            modelBuilder.Entity<User>(b =>
+                        {
+
+                            b.HasIndex(x => x.Email)
+                                                .IsUnique();
+
+                            b.Property(x => x.Email)
+                                .IsRequired()
+                                .HasMaxLength(255);
+
+                            b.Property(x => x.FirstName)
+                                .IsRequired()
+                                .HasMaxLength(255);
+
+                            b.Property(x => x.LastName)
+                                .IsRequired()
+                                .HasMaxLength(255);
+
+                            b.Property(x => x.CreatedAt)
+                                .HasDefaultValueSql("SYSUTCDATETIME()");
+                        });
+
 
             OnConfiguringDecimals(modelBuilder);
         }
