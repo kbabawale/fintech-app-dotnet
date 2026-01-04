@@ -1,10 +1,8 @@
 using System;
 using FluentValidation;
 using Fintech_App.Util;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
-using System.Text.RegularExpressions;
 
 namespace Fintech_App.Middlewares
 {
@@ -28,6 +26,10 @@ namespace Fintech_App.Middlewares
             catch (DbUpdateConcurrencyException ex)
             {
                 await HandleException(context, ex, "The data was modified by another user. Please reload.");
+            }
+            catch (Exceptions.ValidationException ex)
+            {
+                await HandleException(context, ex, ex.Message, true);
             }
             catch (DbUpdateException ex)
             {
@@ -55,14 +57,14 @@ namespace Fintech_App.Middlewares
 
         private async Task HandleException(HttpContext context, Exception ex, string? message = null, bool showMessage = false, int status = StatusCodes.Status400BadRequest)
         {
-            var msg = showMessage && message is not null ? message : ex.Message;
-            _logger.LogInformation(msg);
+            var msg = showMessage && message is not null ? message : !showMessage ? "An unexpected error occurred" : ex.Message;
+            _logger.LogInformation(ex.Message);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = status;
 
             var response = ApiResponse<string>.FailureResponse(
                 msg,
-                message ?? "An unexpected error occurred.");
+                "An unexpected error occurred.");
 
             await context.Response.WriteAsJsonAsync(response);
         }
