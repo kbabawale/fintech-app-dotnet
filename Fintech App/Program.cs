@@ -20,15 +20,15 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddOpenApi();
 
-//Business Layer Services
-builder.Services.AddScoped<IAccount, AccountService>();
-
 //Input Validations
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
 
 //DB Context
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Business Layer Services
+builder.Services.AddScoped<IAccount, AccountService>();
 
 var app = builder.Build();
 
